@@ -4,7 +4,6 @@ import 'package:instrument_store_mobile/presentation/pages/cart/cart_page.dart';
 import 'package:instrument_store_mobile/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:instrument_store_mobile/presentation/pages/home/home_controller.dart';
 import 'package:instrument_store_mobile/presentation/pages/order/order_page.dart';
-import 'package:instrument_store_mobile/presentation/pages/profile/profile_page.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class HomePage extends StatelessWidget {
@@ -23,7 +22,6 @@ class HomePage extends StatelessWidget {
               DashboardPage(),
               CartPage(),
               OrderPage(),
-              ProfilePage(),
             ],
           ),
           bottomNavigationBar: const _BottonNavigationBar(),
@@ -84,18 +82,7 @@ class _BottonNavigationBar extends GetView<HomeController> {
                 ),
               ),
             ),
-
-            /// Profile
-            SalomonBottomBarItem(
-              icon: const Icon(Icons.person),
-              title: Text(
-                "Profile",
-                style: context.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: context.theme.colorScheme.primary,
-                ),
-              ),
-            ),
+            
           ],
         );
       },
