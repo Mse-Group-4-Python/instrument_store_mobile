@@ -18,6 +18,7 @@ class HomePage extends StatelessWidget {
         return Scaffold(
           body: PageView.builder(
             controller: controller.pageController,
+            itemCount: controller.tabBarItems.length,
             onPageChanged: (index) {
               controller.onChangeTab(index);
             },
@@ -48,8 +49,7 @@ class _BottonNavigationBar extends GetView<HomeController> {
     return Obx(
       () {
         return SalomonBottomBar(
-          backgroundColor:
-              context.theme.colorScheme.surfaceVariant.withOpacity(0.4),
+          backgroundColor: context.theme.colorScheme.surfaceVariant.withOpacity(0.4),
           currentIndex: controller.tabBarItems.indexOf(
             controller.currentTab,
           ),

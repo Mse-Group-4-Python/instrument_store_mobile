@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
 import 'package:instrument_store_mobile/presentation/widgets/common_text_field.dart';
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
+import 'package:instrument_store_mobile/presentation/widgets/search_loading_widget.dart';
 import 'package:lottie/lottie.dart';
 
 import 'search_controller.dart';
@@ -114,7 +115,7 @@ class _SearchResultSection extends GetView<SearchPageController> {
               switch (controller.loadingState.value) {
                 case LoadingState.initial:
                 case LoadingState.loading:
-                  return const _SearchLoadingWidget();
+                  return const SearchLoadingWidget();
                 case LoadingState.success:
                   return const _SearchResultWidget();
                 case LoadingState.empty:
@@ -133,42 +134,6 @@ class _SearchResultSection extends GetView<SearchPageController> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _SearchLoadingWidget extends StatelessWidget {
-  const _SearchLoadingWidget();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(32),
-          decoration: BoxDecoration(
-            color: context.theme.colorScheme.surfaceVariant.withOpacity(.1),
-            shape: BoxShape.circle,
-          ),
-          child: Lottie.asset(
-            'assets/search_animation.json',
-          ),
-        ),
-        const SizedBox(height: 20),
-        AnimatedTextKit(
-          animatedTexts: [
-            WavyAnimatedText(
-              'Searching...',
-              speed: const Duration(milliseconds: 210),
-              textStyle: context.theme.textTheme.titleLarge?.copyWith(
-                color: context.theme.colorScheme.primary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-          repeatForever: true,
-        ),
-      ],
     );
   }
 }
@@ -270,18 +235,15 @@ class _ProductSearchResultList extends GetView<SearchPageController> {
                           children: [
                             Text(
                               product?.name ?? '',
-                              style:
-                                  context.theme.textTheme.titleSmall?.copyWith(
+                              style: context.theme.textTheme.titleSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               product?.name ?? '',
-                              style:
-                                  context.theme.textTheme.bodySmall?.copyWith(
-                                color: context.theme.colorScheme.onBackground
-                                    .withOpacity(.5),
+                              style: context.theme.textTheme.bodySmall?.copyWith(
+                                color: context.theme.colorScheme.onBackground.withOpacity(.5),
                               ),
                             ),
                           ],

@@ -19,8 +19,7 @@ enum HomeTabBar {
   }
 }
 
-class HomeController extends GetxController
-    with ServiceMixin, GetTickerProviderStateMixin {
+class HomeController extends GetxController with ServiceMixin, GetTickerProviderStateMixin {
   final List<HomeTabBar> _tabBarItems = [
     HomeTabBar.home,
     HomeTabBar.order,
@@ -46,6 +45,7 @@ class HomeController extends GetxController
 
   void onChangeTab(int index) {
     if (index == _tabBarItems.indexOf(_currentTab.value)) return;
+    if (index > _tabBarItems.length - 1) return;
     _currentTab.value = _tabBarItems[index];
     tabController.animateTo(index);
     pageController.animateToPage(
