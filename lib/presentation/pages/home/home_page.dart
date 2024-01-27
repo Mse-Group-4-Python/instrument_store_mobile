@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:instrument_store_mobile/presentation/pages/cart/cart_page.dart';
 import 'package:instrument_store_mobile/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:instrument_store_mobile/presentation/pages/home/home_controller.dart';
 import 'package:instrument_store_mobile/presentation/pages/order/order_page.dart';
@@ -20,7 +19,6 @@ class HomePage extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             children: const [
               DashboardPage(),
-              CartPage(),
               OrderPage(),
             ],
           ),
@@ -39,9 +37,22 @@ class _BottonNavigationBar extends GetView<HomeController> {
     return Obx(
       () {
         return SalomonBottomBar(
-          currentIndex: controller.tabBarItems.indexOf(controller.currentTab),
+          backgroundColor:
+              context.theme.colorScheme.surfaceVariant.withOpacity(0.4),
+          currentIndex: controller.tabBarItems.indexOf(
+            controller.currentTab,
+          ),
           onTap: controller.onChangeTab,
-          margin: const EdgeInsets.fromLTRB(12, 0, 12, 24),
+          margin: const EdgeInsets.fromLTRB(
+            16,
+            16,
+            16,
+            16,
+          ),
+          itemPadding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 48,
+          ),
           itemShape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16)),
           ),
@@ -60,16 +71,6 @@ class _BottonNavigationBar extends GetView<HomeController> {
             ),
 
             /// Likes
-            SalomonBottomBarItem(
-              icon: const Icon(Icons.shopping_cart),
-              title: Text(
-                "Cart",
-                style: context.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: context.theme.colorScheme.primary,
-                ),
-              ),
-            ),
 
             /// Search
             SalomonBottomBarItem(
@@ -82,7 +83,6 @@ class _BottonNavigationBar extends GetView<HomeController> {
                 ),
               ),
             ),
-            
           ],
         );
       },

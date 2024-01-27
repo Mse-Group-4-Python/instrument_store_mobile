@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:instrument_store_mobile/domain/models/category_model.dart';
 import 'package:instrument_store_mobile/presentation/pages/dashboard/dashboard_controller.dart';
+import 'package:instrument_store_mobile/presentation/pages/search/search_page.dart';
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/error_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/loading_widget.dart';
@@ -80,68 +81,68 @@ class _SearchSection extends GetView<DashboardController> {
         ),
         const SizedBox(height: 16),
         GestureDetector(
-          onTap: () => {},
-          child: Hero(
-            tag: const ValueKey('search-bar'),
-            child: Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: context.theme.colorScheme.surfaceVariant,
-              ),
-              height: 48,
-              width: double.infinity,
-              child: DefaultTextStyle(
-                style: context.theme.textTheme.titleSmall!.copyWith(
-                  color:
-                      context.theme.colorScheme.onBackground.withOpacity(0.5),
+          onTap: () => Get.to(
+            () => const SearchPage(),
+          ),
+          child: Material(
+            child: Hero(
+              tag: 'search-bar',
+              child: Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: context.theme.colorScheme.surfaceVariant,
                 ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.search, size: 24),
-                    const SizedBox(width: 8),
-                    AnimatedTextKit(
-                      onTap: () => {},
-                      animatedTexts: [
-                        TypewriterAnimatedText(
-                          'Search here...',
-                          speed: const Duration(milliseconds: 210),
-                          curve: Curves.decelerate,
-                          cursor: '|',
+                height: 48,
+                width: double.infinity,
+                child: DefaultTextStyle(
+                  style: context.theme.textTheme.titleSmall!.copyWith(
+                    color:
+                        context.theme.colorScheme.onBackground.withOpacity(0.5),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.search, size: 24),
+                      const SizedBox(width: 8),
+                      AnimatedTextKit(
+                        onTap: () => Get.to(
+                          () => const SearchPage(),
                         ),
-                        TypewriterAnimatedText(
-                          'Search with prompt...',
-                          speed: const Duration(milliseconds: 210),
-                          curve: Curves.decelerate,
-                          cursor: '|',
-                        ),
-                      ],
-                      repeatForever: true,
-                    ),
-                    // const Spacer(),
-                    // GestureDetector(
-                    //   onTap: controller.onPressQrCodeButton,
-                    //   child: const Icon(
-                    //     Icons.qr_code_scanner,
-                    //     size: 20,
-                    //   ),
-                    // ),
-                  ],
+                        animatedTexts: [
+                          TypewriterAnimatedText(
+                            'Can we help you find something?',
+                            speed: const Duration(milliseconds: 120),
+                            curve: Curves.decelerate,
+                            cursor: '_',
+                          ),
+                        ],
+                        repeatForever: true,
+                      ),
+                      // const Spacer(),
+                      // GestureDetector(
+                      //   onTap: controller.onPressQrCodeButton,
+                      //   child: const Icon(
+                      //     Icons.qr_code_scanner,
+                      //     size: 20,
+                      //   ),
+                      // ),
+                    ],
+                  ),
                 ),
               ),
+              // TextFormField(
+              //   readOnly: true,
+              //   onTap: () => {},
+              //   // Get.toNamed(AppRouter.docSearchPage),
+              //   decoration: const InputDecoration(
+              //     prefixIcon: Icon(Icons.search),
+              //     hintText: 'Tìm kiếm văn bản...',
+              //     filled: true,
+              //   ),
+              //   // controller: TextEditingController(),
+              // ),
             ),
-            // TextFormField(
-            //   readOnly: true,
-            //   onTap: () => {},
-            //   // Get.toNamed(AppRouter.docSearchPage),
-            //   decoration: const InputDecoration(
-            //     prefixIcon: Icon(Icons.search),
-            //     hintText: 'Tìm kiếm văn bản...',
-            //     filled: true,
-            //   ),
-            //   // controller: TextEditingController(),
-            // ),
           ),
         )
       ],
@@ -263,7 +264,7 @@ class _CategoryItem extends StatelessWidget {
                     topLeft: Radius.circular(100),
                   ),
                   color:
-                      context.theme.colorScheme.surfaceVariant.withOpacity(.6),
+                      context.theme.colorScheme.surfaceVariant.withOpacity(.3),
                 ),
               ),
             ),

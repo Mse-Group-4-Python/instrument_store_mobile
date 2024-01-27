@@ -25,6 +25,26 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
         fontFamily: GoogleFonts.openSans().fontFamily,
         useMaterial3: true,
+        inputDecorationTheme: InputDecorationTheme(
+          constraints: const BoxConstraints(
+            minHeight: 48,
+          ),
+          fillColor: context.theme.colorScheme.surfaceVariant,
+          filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          focusColor: context.theme.colorScheme.surfaceVariant,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+        ),
       ),
       home: const HomePage(),
     );
