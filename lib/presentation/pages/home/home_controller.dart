@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instrument_store_mobile/domain/services/services.dart';
+import 'package:instrument_store_mobile/presentation/pages/cart/cart_controller.dart';
 
 enum HomeTabBar {
   home,
@@ -31,6 +32,14 @@ class HomeController extends GetxController
     length: _tabBarItems.length,
   );
 
+  late PageController pageController = PageController(
+    initialPage: _tabBarItems.indexOf(_currentTab.value),
+  );
+
+  HomeController() {
+    Get.put<CartController>(CartController());
+  }
+
   late final Rx<HomeTabBar> _currentTab = _tabBarItems.first.obs;
 
   HomeTabBar get currentTab => _currentTab.value;
@@ -39,5 +48,10 @@ class HomeController extends GetxController
     if (index == _tabBarItems.indexOf(_currentTab.value)) return;
     _currentTab.value = _tabBarItems[index];
     tabController.animateTo(index);
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.decelerate,
+    );
   }
 }

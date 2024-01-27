@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:instrument_store_mobile/presentation/pages/cart/cart_page.dart';
+import 'package:instrument_store_mobile/presentation/pages/cart/widgets/cart_count_badge_wrapper.dart';
 import 'package:instrument_store_mobile/presentation/pages/dashboard/dashboard_page.dart';
 import 'package:instrument_store_mobile/presentation/pages/home/home_controller.dart';
 import 'package:instrument_store_mobile/presentation/pages/order/order_page.dart';
@@ -14,15 +16,24 @@ class HomePage extends StatelessWidget {
       init: Get.put(HomeController()) ?? HomeController(),
       builder: (controller) {
         return Scaffold(
-          body: TabBarView(
-            controller: controller.tabController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: const [
-              DashboardPage(),
-              OrderPage(),
-            ],
+          body: PageView.builder(
+            controller: controller.pageController,
+            onPageChanged: (index) {
+              controller.onChangeTab(index);
+            },
+            itemBuilder: (context, index) {
+              switch (controller.tabBarItems[index]) {
+                case HomeTabBar.home:
+                  return const DashboardPage();
+                case HomeTabBar.order:
+                  return const OrderPage();
+                default:
+                  return const SizedBox.shrink();
+              }
+            },
           ),
           bottomNavigationBar: const _BottonNavigationBar(),
+          floatingActionButton: const _CartFloatingButton(),
         );
       },
     );
@@ -87,5 +98,23 @@ class _BottonNavigationBar extends GetView<HomeController> {
         );
       },
     );
+  }
+}
+
+class _CartFloatingButton extends GetView<HomeController> {
+  const _CartFloatingButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return CartCountBadgeWrapper(
+        child: FloatingActionButton(
+      onPressed: () {
+        Get.to(
+          () => const CartPage(),
+          transition: Transition.cupertino,
+        );
+      },
+      child: const Icon(Icons.shopping_cart),
+    ));
   }
 }

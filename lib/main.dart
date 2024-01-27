@@ -21,10 +21,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Instrument Store',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
         fontFamily: GoogleFonts.openSans().fontFamily,
         useMaterial3: true,
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.blueGrey.shade100,
+          foregroundColor: Colors.grey.shade900,
+        ),
         inputDecorationTheme: InputDecorationTheme(
           constraints: const BoxConstraints(
             minHeight: 48,

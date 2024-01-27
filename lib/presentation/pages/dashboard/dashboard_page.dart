@@ -9,6 +9,7 @@ import 'package:instrument_store_mobile/presentation/pages/search/search_page.da
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/error_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/loading_widget.dart';
+import 'package:instrument_store_mobile/presentation/widgets/product_filter/product_filter_widget.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -80,71 +81,60 @@ class _SearchSection extends GetView<DashboardController> {
           ),
         ),
         const SizedBox(height: 16),
-        GestureDetector(
-          onTap: () => Get.to(
-            () => const SearchPage(),
-          ),
-          child: Material(
-            child: Hero(
-              tag: 'search-bar',
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: context.theme.colorScheme.surfaceVariant,
+        Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () => Get.to(
+                  () => const SearchPage(),
                 ),
-                height: 48,
-                width: double.infinity,
-                child: DefaultTextStyle(
-                  style: context.theme.textTheme.titleSmall!.copyWith(
-                    color:
-                        context.theme.colorScheme.onBackground.withOpacity(0.5),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.search, size: 24),
-                      const SizedBox(width: 8),
-                      AnimatedTextKit(
-                        onTap: () => Get.to(
-                          () => const SearchPage(),
-                        ),
-                        animatedTexts: [
-                          TypewriterAnimatedText(
-                            'Can we help you find something?',
-                            speed: const Duration(milliseconds: 120),
-                            curve: Curves.decelerate,
-                            cursor: '_',
-                          ),
-                        ],
-                        repeatForever: true,
+                child: Material(
+                  child: Hero(
+                    tag: 'search-bar',
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: context.theme.colorScheme.surfaceVariant,
                       ),
-                      // const Spacer(),
-                      // GestureDetector(
-                      //   onTap: controller.onPressQrCodeButton,
-                      //   child: const Icon(
-                      //     Icons.qr_code_scanner,
-                      //     size: 20,
-                      //   ),
-                      // ),
-                    ],
+                      height: 48,
+                      width: double.infinity,
+                      child: DefaultTextStyle(
+                        style: context.theme.textTheme.titleSmall!.copyWith(
+                          color: context.theme.colorScheme.onBackground
+                              .withOpacity(0.5),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.search, size: 24),
+                            const SizedBox(width: 8),
+                            AnimatedTextKit(
+                              onTap: () => Get.to(
+                                () => const SearchPage(),
+                              ),
+                              animatedTexts: [
+                                TypewriterAnimatedText(
+                                  'Can we help you find something?',
+                                  speed: const Duration(milliseconds: 120),
+                                  curve: Curves.decelerate,
+                                  cursor: '_',
+                                ),
+                              ],
+                              repeatForever: true,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-              // TextFormField(
-              //   readOnly: true,
-              //   onTap: () => {},
-              //   // Get.toNamed(AppRouter.docSearchPage),
-              //   decoration: const InputDecoration(
-              //     prefixIcon: Icon(Icons.search),
-              //     hintText: 'Tìm kiếm văn bản...',
-              //     filled: true,
-              //   ),
-              //   // controller: TextEditingController(),
-              // ),
             ),
-          ),
-        )
+            const SizedBox(width: 8),
+            const ProductFilterButton()
+          ],
+        ),
       ],
     );
   }
