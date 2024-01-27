@@ -6,12 +6,16 @@ class CommonTextField extends StatelessWidget {
   final String hintText;
   final Widget? prefixIcon;
   final bool autofocus;
+  final TextInputType keyboardType;
+  final Future<void> Function(String)? onSubmitted;
   const CommonTextField({
     super.key,
     required this.controller,
     this.hintText = 'Input something here...',
     this.prefixIcon,
     this.autofocus = false,
+    this.keyboardType = TextInputType.text,
+    this.onSubmitted,
   });
 
   @override
@@ -20,6 +24,13 @@ class CommonTextField extends StatelessWidget {
       controller: controller,
       autofocus: autofocus,
       style: context.theme.textTheme.titleSmall,
+      keyboardType: keyboardType,
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).unfocus();
+        if (onSubmitted != null) {
+          onSubmitted?.call(value);
+        }
+      },
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 8,

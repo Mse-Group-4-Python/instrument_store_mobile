@@ -16,10 +16,12 @@ class LoadingWidget extends StatelessWidget {
     return FadeInUp(
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          minHeight: (context.mediaQuery.size.height * .8).clamp(0, 400),
+          minHeight: (context.mediaQuery.size.height * .6).clamp(0, 400),
         ),
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 decoration: BoxDecoration(

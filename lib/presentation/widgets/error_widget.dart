@@ -7,7 +7,7 @@ class ErrorHandleWidget extends StatelessWidget {
   final Function()? onRetry;
   const ErrorHandleWidget({
     super.key,
-    this.title = 'Có lỗi xảy ra',
+    this.title = 'Oh no, something went wrong',
     this.content = '',
     this.onRetry,
   });
@@ -22,7 +22,7 @@ class ErrorHandleWidget extends StatelessWidget {
             Text(content),
             ElevatedButton(
               onPressed: onRetry,
-              child: const Text('Thử lại'),
+              child: const Text('Retry'),
             ),
           ],
         ),

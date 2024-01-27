@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:instrument_store_mobile/core/utils/double_ext.dart';
 import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
+import 'package:instrument_store_mobile/domain/models/instrument_item_model.dart';
+import 'package:instrument_store_mobile/presentation/pages/cart/cart_page.dart';
+import 'package:instrument_store_mobile/presentation/pages/cart/widgets/cart_count_badge_wrapper.dart';
+import 'package:instrument_store_mobile/presentation/widgets/background_wrapper.dart';
 import 'package:instrument_store_mobile/presentation/widgets/common_text_field.dart';
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/error_widget.dart';
@@ -9,6 +15,7 @@ import 'package:instrument_store_mobile/presentation/widgets/loading_widget.dart
 import 'package:instrument_store_mobile/presentation/widgets/product_filter/product_filter_controller.dart';
 import 'package:instrument_store_mobile/presentation/widgets/product_filter/product_filter_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/product_filter/view_models/product_filter_view_model.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 import 'product_page_controller.dart';
 
@@ -23,38 +30,47 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ProductPageController>(
-      init: Get.put(
+    return KeyboardDismisser(
+      child: GetBuilder<ProductPageController>(
+        init: Get.put(
+              ProductPageController(
+                initialFilter: initialFilter,
+                initialSearchKeyword: initialSearchKeyword,
+              ),
+            ) ??
             ProductPageController(
-              initialFilter: initialFilter,
               initialSearchKeyword: initialSearchKeyword,
+              initialFilter: initialFilter,
             ),
-          ) ??
-          ProductPageController(
-            initialSearchKeyword: initialSearchKeyword,
-            initialFilter: initialFilter,
-          ),
-      builder: (controller) {
-        return const Scaffold(
-          body: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.fromLTRB(
-              16,
-              32,
-              16,
-              16,
+        builder: (controller) {
+          return Scaffold(
+            body: const BackgroundWrapper(
+              child: SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    16,
+                    16,
+                    16,
+                    0,
+                  ),
+                  child: Column(
+                    children: [
+                      _SearchAndFilterSection(),
+                      Expanded(child: _SearchResultSection()),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            child: Column(
-              children: [
-                SizedBox(height: 24),
-                _SearchAndFilterSection(),
-                SizedBox(height: 32),
-                _SearchResultSection(),
-              ],
+            floatingActionButton: CartCountBadgeWrapper(
+              child: FloatingActionButton(
+                onPressed: () => Get.to(() => const CartPage()),
+                child: const Icon(Icons.shopping_cart),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -64,23 +80,26 @@ class _SearchAndFilterSection extends GetView<ProductPageController> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: CommonTextField(
-            controller: controller.searchController,
-            hintText: 'Search',
-            prefixIcon: const Icon(Icons.search),
-            autofocus: false,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: CommonTextField(
+              controller: controller.searchController,
+              hintText: 'Search',
+              prefixIcon: const Icon(Icons.search),
+              autofocus: false,
+            ),
           ),
-        ),
-        const SizedBox(width: 8),
-        ProductFilterButton(
-          controller: ProductFilterController(
-            initialFilter: controller.initialFilter,
-          ),
-        )
-      ],
+          const SizedBox(width: 8),
+          ProductFilterButton(
+            controller: ProductFilterController(
+              initialFilter: controller.initialFilter,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -120,7 +139,7 @@ class _ListInstrumentItem extends GetView<ProductPageController> {
       child: AnimationLimiter(
         child: ListView.separated(
           separatorBuilder: (context, index) => const SizedBox(height: 16),
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(bottom: 16, top: 16),
           shrinkWrap: true,
           itemCount: controller.instrumentItemModels.length,
           physics: const BouncingScrollPhysics(
@@ -135,55 +154,201 @@ class _ListInstrumentItem extends GetView<ProductPageController> {
                 child: SlideAnimation(
                   duration: const Duration(milliseconds: 410),
                   horizontalOffset: 50,
-                  child: Container(
-                    clipBehavior: Clip.none,
-                    constraints: const BoxConstraints(
-                      maxHeight: 100,
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: context.theme.colorScheme.secondaryContainer,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      children: [
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            maxWidth: 60,
-                            maxHeight: 100,
-                          ),
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            fit: StackFit.expand,
-                            children: [
-                              Positioned.fill(
-                                child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: context.theme.colorScheme.surface,
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 20,
-                                width: 60,
-                                child: Image.asset(
-                                  product.image,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                  child: _InstrumentItem(product: product),
                 ),
               ),
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class _InstrumentItem extends GetView<ProductPageController> {
+  const _InstrumentItem({
+    required this.product,
+  });
+
+  final InstrumentItemModel product;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      clipBehavior: Clip.none,
+      constraints: const BoxConstraints(
+        maxWidth: double.infinity,
+        minHeight: 100,
+      ),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: context.theme.colorScheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    constraints: const BoxConstraints(
+                      maxHeight: 80,
+                      maxWidth: 80,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: context.theme.colorScheme.surface,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(100),
+                        topRight: Radius.circular(40),
+                        bottomLeft: Radius.circular(16),
+                        bottomRight: Radius.circular(40),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: context.theme.colorScheme.onSurface
+                              .withOpacity(.2),
+                          blurRadius: 8,
+                          offset: const Offset(4, 4),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 12,
+                  width: 80,
+                  child: Image.asset(
+                    product.image,
+                    fit: BoxFit.scaleDown,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      product.name,
+                      style: context.theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Color(s): ',
+                            style:
+                                context.theme.textTheme.bodySmall?.copyWith(),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [
+                                  product.color,
+                                  product.color.withOpacity(.5),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Brand: ',
+                            style:
+                                context.theme.textTheme.bodySmall?.copyWith(),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            product.manufacturer,
+                            style: context.theme.textTheme.bodyMedium?.copyWith(
+                              color: context.theme.colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    product.description * 3,
+                    style: context.theme.textTheme.labelMedium?.copyWith(
+                      color: context.theme.colorScheme.onBackground
+                          .withOpacity(.5),
+                    ),
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          product.price.toPrice(),
+                          style:
+                              context.theme.textTheme.headlineSmall?.copyWith(
+                            color: context.theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Spacer(),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: context.theme.colorScheme.primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed: () => controller.addToCart(product),
+                          child: Text(
+                            'Add to cart',
+                            style: context.theme.textTheme.bodyMedium?.copyWith(
+                              color: context.theme.colorScheme.onPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -22,13 +22,15 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Instrument Store',
       debugShowCheckedModeBanner: false,
+      transitionDuration: const Duration(milliseconds: 410),
+      defaultTransition: Transition.fade,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
         fontFamily: GoogleFonts.openSans().fontFamily,
         useMaterial3: true,
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: Colors.blueGrey.shade100,
-          foregroundColor: Colors.grey.shade900,
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Color.fromARGB(255, 12, 79, 112),
+          foregroundColor: Colors.white,
         ),
         inputDecorationTheme: InputDecorationTheme(
           constraints: const BoxConstraints(

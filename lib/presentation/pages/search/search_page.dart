@@ -1,11 +1,10 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
 import 'package:instrument_store_mobile/presentation/widgets/common_text_field.dart';
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/search_loading_widget.dart';
-import 'package:lottie/lottie.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 import 'search_controller.dart';
 
@@ -16,33 +15,45 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SearchPageController>(
-        init: Get.put(SearchPageController()),
-        builder: (context) {
-          return const Scaffold(
-            body: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(
-                16,
-                32,
-                16,
-                16,
+    return KeyboardDismisser(
+      gestures: const [
+        GestureType.onTap,
+        GestureType.onPanUpdateDownDirection,
+      ],
+      child: GetBuilder<SearchPageController>(
+          init: Get.put(SearchPageController()),
+          builder: (controller) {
+            return Scaffold(
+              body: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(
+                  16,
+                  32,
+                  16,
+                  16,
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        BackButton(
+                          onPressed: () {
+                            FocusScope.of(context).unfocus();
+                            Get.back();
+                          },
+                        ),
+                        const Expanded(child: _SearchTextField()),
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+                    const _SearchResultSection(),
+                  ],
+                ),
               ),
-              child: Column(
-                children: [
-                  SizedBox(height: 24),
-                  Row(
-                    children: [
-                      BackButton(),
-                      Expanded(child: _SearchTextField()),
-                    ],
-                  ),
-                  SizedBox(height: 32),
-                  _SearchResultSection(),
-                ],
-              ),
-            ),
-          );
-        });
+            );
+          }),
+    );
   }
 }
 
@@ -235,15 +246,18 @@ class _ProductSearchResultList extends GetView<SearchPageController> {
                           children: [
                             Text(
                               product?.name ?? '',
-                              style: context.theme.textTheme.titleSmall?.copyWith(
+                              style:
+                                  context.theme.textTheme.titleSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               product?.name ?? '',
-                              style: context.theme.textTheme.bodySmall?.copyWith(
-                                color: context.theme.colorScheme.onBackground.withOpacity(.5),
+                              style:
+                                  context.theme.textTheme.bodySmall?.copyWith(
+                                color: context.theme.colorScheme.onBackground
+                                    .withOpacity(.5),
                               ),
                             ),
                           ],

@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
 import 'package:instrument_store_mobile/domain/models/instrument_item_model.dart';
 import 'package:instrument_store_mobile/domain/services/services.dart';
+import 'package:instrument_store_mobile/presentation/pages/cart/cart_controller.dart';
+import 'package:instrument_store_mobile/presentation/pages/cart/view_models/cart_view_model.dart';
 import 'package:instrument_store_mobile/presentation/widgets/product_filter/view_models/product_filter_view_model.dart';
 
 class ProductPageController extends GetxController with ServiceMixin {
@@ -42,5 +44,17 @@ class ProductPageController extends GetxController with ServiceMixin {
     } catch (e) {
       _loadingState.value = LoadingState.error;
     }
+  }
+
+  Future<void> addToCart(
+    InstrumentItemModel instrumentItemModel,
+  ) async {
+    final cartController = Get.find<CartController>();
+    cartController.addToCart(
+      CartItem(
+        instrumentItem: instrumentItemModel,
+        quantity: 1,
+      ),
+    );
   }
 }

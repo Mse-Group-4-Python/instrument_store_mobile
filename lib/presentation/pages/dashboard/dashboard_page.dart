@@ -7,11 +7,13 @@ import 'package:instrument_store_mobile/domain/models/category_model.dart';
 import 'package:instrument_store_mobile/presentation/pages/dashboard/dashboard_controller.dart';
 import 'package:instrument_store_mobile/presentation/pages/product/product_page.dart';
 import 'package:instrument_store_mobile/presentation/pages/search/search_page.dart';
+import 'package:instrument_store_mobile/presentation/widgets/background_wrapper.dart';
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/error_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/loading_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/product_filter/product_filter_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/product_filter/view_models/product_filter_view_model.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -29,38 +31,46 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DashboardController>(
-      builder: (controller) {
-        return Scaffold(
-            body: SafeArea(
-          bottom: false,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: AnimationLimiter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: AnimationConfiguration.toStaggeredList(
-                  duration: const Duration(milliseconds: 410),
-                  childAnimationBuilder: (widget) => SlideAnimation(
-                    verticalOffset: 50,
-                    child: FadeInAnimation(
-                      child: widget,
+    return KeyboardDismisser(
+      child: GetBuilder<DashboardController>(
+        builder: (controller) {
+          return Scaffold(
+              body: BackgroundWrapper(
+            child: SafeArea(
+              bottom: false,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: AnimationLimiter(
+                  child: SizedBox(
+                    width: context.width,
+                    height: context.height,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: AnimationConfiguration.toStaggeredList(
+                        duration: const Duration(milliseconds: 410),
+                        childAnimationBuilder: (widget) => SlideAnimation(
+                          verticalOffset: 50,
+                          child: FadeInAnimation(
+                            child: widget,
+                          ),
+                        ),
+                        children: [
+                          const SizedBox(height: 24),
+                          const _WelcomeSection(),
+                          const SizedBox(height: 8),
+                          const _SearchSection(),
+                          const SizedBox(height: 24),
+                          const _CategorySectionBuilder(),
+                        ],
+                      ),
                     ),
                   ),
-                  children: [
-                    const SizedBox(height: 24),
-                    const _WelcomeSection(),
-                    const SizedBox(height: 8),
-                    const _SearchSection(),
-                    const SizedBox(height: 24),
-                    const _CategorySectionBuilder(),
-                  ],
                 ),
               ),
             ),
-          ),
-        ));
-      },
+          ));
+        },
+      ),
     );
   }
 }
@@ -91,6 +101,7 @@ class _SearchSection extends GetView<DashboardController> {
                   () => const SearchPage(),
                 ),
                 child: Material(
+                  borderRadius: BorderRadius.circular(16),
                   child: Hero(
                     tag: 'search-bar',
                     child: Container(
@@ -269,7 +280,7 @@ class _CategoryItem extends StatelessWidget {
                     topLeft: Radius.circular(100),
                   ),
                   color:
-                      context.theme.colorScheme.surfaceVariant.withOpacity(.3),
+                      context.theme.colorScheme.surfaceVariant.withOpacity(.7),
                 ),
               ),
             ),

@@ -5,9 +5,11 @@ import 'package:lottie/lottie.dart';
 
 class SearchLoadingWidget extends StatelessWidget {
   final String text;
+  final bool isAnimationText;
   const SearchLoadingWidget({
     Key? key,
     this.text = 'Searching...',
+    this.isAnimationText = true,
   }) : super(key: key);
 
   @override
@@ -25,19 +27,30 @@ class SearchLoadingWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        AnimatedTextKit(
-          animatedTexts: [
-            WavyAnimatedText(
+        Builder(builder: (context) {
+          if (!isAnimationText) {
+            return Text(
               text,
-              speed: const Duration(milliseconds: 210),
-              textStyle: context.theme.textTheme.titleLarge?.copyWith(
+              style: context.theme.textTheme.headlineSmall?.copyWith(
                 color: context.theme.colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
-            ),
-          ],
-          repeatForever: true,
-        ),
+            );
+          }
+          return AnimatedTextKit(
+            animatedTexts: [
+              WavyAnimatedText(
+                text,
+                speed: const Duration(milliseconds: 210),
+                textStyle: context.theme.textTheme.titleLarge?.copyWith(
+                  color: context.theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+            repeatForever: true,
+          );
+        }),
       ],
     );
   }

@@ -7,17 +7,20 @@ class EmptyHandleWidget extends StatelessWidget {
   final String title;
   final String content;
   final Function()? onRetry;
+  final String retryText;
   const EmptyHandleWidget({
     super.key,
-    this.title = 'Không có dữ liệu',
+    this.title = 'No data is available',
     this.content = '',
     this.onRetry,
+    this.retryText = 'Retry',
   });
 
   @override
   Widget build(BuildContext context) {
     return ZoomIn(
       child: Container(
+        margin: const EdgeInsets.all(32),
         padding: const EdgeInsets.all(64),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -25,6 +28,7 @@ class EmptyHandleWidget extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Lottie.asset(
               'assets/empty_animation.json',
@@ -49,7 +53,7 @@ class EmptyHandleWidget extends StatelessWidget {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: onRetry,
-                child: const Text('Thử lại'),
+                child: Text(retryText),
               ),
             ],
           ],
