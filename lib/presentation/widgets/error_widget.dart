@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 class ErrorHandleWidget extends StatelessWidget {
@@ -13,16 +14,18 @@ class ErrorHandleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Text(title),
-          Text(content),
-          ElevatedButton(
-            onPressed: onRetry,
-            child: const Text('Thử lại'),
-          ),
-        ],
+    return ZoomIn(
+      child: Center(
+        child: Column(
+          children: [
+            Text(title),
+            Text(content),
+            ElevatedButton(
+              onPressed: onRetry,
+              child: const Text('Thử lại'),
+            ),
+          ],
+        ),
       ),
     );
   }

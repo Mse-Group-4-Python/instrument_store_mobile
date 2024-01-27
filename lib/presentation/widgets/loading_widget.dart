@@ -1,6 +1,6 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -13,7 +13,7 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FadeInAnimation(
+    return FadeInUp(
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minHeight: (context.mediaQuery.size.height * .8).clamp(0, 400),

@@ -35,7 +35,7 @@ class InstrumentItemModel extends BaseModel {
           id: index,
           name: 'Instrument Item $index',
           description: 'Description $index',
-          image: 'https://picsum.photos/200/300?random=$index',
+          image: 'assets/guitar_category.png',
           price: Random().nextDouble(),
         );
       },

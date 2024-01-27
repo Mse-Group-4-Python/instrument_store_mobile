@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:instrument_store_mobile/domain/models/category_model.dart';
 import 'package:instrument_store_mobile/presentation/pages/dashboard/dashboard_controller.dart';
+import 'package:instrument_store_mobile/presentation/pages/product/product_page.dart';
 import 'package:instrument_store_mobile/presentation/pages/search/search_page.dart';
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/error_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/loading_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/product_filter/product_filter_widget.dart';
+import 'package:instrument_store_mobile/presentation/widgets/product_filter/view_models/product_filter_view_model.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -229,7 +231,20 @@ class _CategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => {},
+      onTap: () => Get.to(
+        () => ProductPage(
+          initialFilter: ProductFilterViewModel(
+            keyword: null,
+            category: category,
+            manufacturer: null,
+            maxPrice: null,
+            minPrice: null,
+            sortBy: null,
+            sortType: null,
+          ),
+          initialSearchKeyword: null,
+        ),
+      ),
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 8,

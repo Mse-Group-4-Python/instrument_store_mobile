@@ -57,18 +57,16 @@ class ProductFilterBottomSheet extends StatelessWidget {
             color: context.theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
           ),
-          child: Column(
+          child: const Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const _ProductFilterHeader(),
-              const SizedBox(height: 16),
+              _ProductFilterHeader(),
+              SizedBox(height: 16),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const _ProductFilterByCategory(),
-                      _ProductFilterByManufacturer(),
-                      _ProductFilterByPrice(),
+                      _ProductFilterByCategory(),
                     ],
                   ),
                 ),
@@ -121,11 +119,9 @@ class _ProductFilterByCategory extends GetView<ProductFilterController> {
         Wrap(
           spacing: 16,
           runSpacing: 16,
-          children: controller.productFilterViewModel.categories
+          children: controller.categoriesSelection
               .map(
-                (category) => _ProductFilterByCategoryItem(
-                  category: category,
-                ),
+                (category) => const _ProductFilterByCategoryItem(),
               )
               .toList(),
         ),
@@ -183,5 +179,14 @@ class ProductFilterCountWrapper extends GetView<ProductFilterController> {
         );
       },
     );
+  }
+}
+
+class _ProductFilterByCategoryItem extends StatelessWidget {
+  const _ProductFilterByCategoryItem();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

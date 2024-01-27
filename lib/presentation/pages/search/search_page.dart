@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
+import 'package:instrument_store_mobile/presentation/widgets/common_text_field.dart';
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
 import 'package:lottie/lottie.dart';
 
@@ -59,26 +60,11 @@ class _SearchTextField extends GetView<SearchPageController> {
         toHeroContext,
       ) {
         return Material(
-          child: TextField(
+          child: CommonTextField(
+            controller: controller.searchController,
+            hintText: 'Input something here...',
+            prefixIcon: const Icon(Icons.search_rounded),
             autofocus: true,
-            style: context.theme.textTheme.titleSmall,
-            decoration: InputDecoration(
-              hintText: 'Input something here...',
-              prefixIcon: const Icon(Icons.search),
-              fillColor: context.theme.colorScheme.surfaceVariant,
-              filled: true,
-              hintStyle: context.theme.textTheme.titleSmall?.copyWith(
-                color: context.theme.colorScheme.onBackground.withOpacity(0.5),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 8,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide.none,
-              ),
-            ),
           ),
         );
       },
@@ -95,23 +81,11 @@ class _SearchTextField extends GetView<SearchPageController> {
         );
       },
       child: Material(
-        child: TextFormField(
+        child: CommonTextField(
           controller: controller.searchController,
+          hintText: 'Input something here...',
+          prefixIcon: const Icon(Icons.search_rounded),
           autofocus: true,
-          style: context.theme.textTheme.titleSmall,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 8,
-              vertical: 8,
-            ),
-            hintStyle: context.theme.textTheme.titleSmall?.copyWith(
-              color: context.theme.colorScheme.onBackground.withOpacity(0.5),
-            ),
-            hintText: 'Input something here...',
-            prefixIcon: const Icon(Icons.search),
-            fillColor: context.theme.colorScheme.surfaceVariant,
-            filled: true,
-          ),
         ),
       ),
     );
