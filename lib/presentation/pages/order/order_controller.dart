@@ -14,17 +14,12 @@ class OrderController extends GetxController with ServiceMixin {
   @override
   void onInit() {
     super.onInit();
-    phoneSearchController.addListener(() async {
-      if (phoneSearchController.text.isEmpty) {
-        loadingState.value = LoadingState.initial;
-        return;
-      }
-      log(phoneSearchController.text, name: 'OrderController_onInit()');
-      await search();
-    });
   }
 
-  Future<void> search() async {
+  Future<void> search(String keyword) async {
+    if (keyword.isEmpty) {
+      return;
+    }
     loadingState.value = LoadingState.loading;
     try {
       final result = CustomerOrderModel.mockData(
