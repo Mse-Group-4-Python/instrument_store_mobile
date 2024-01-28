@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
 import 'package:instrument_store_mobile/presentation/widgets/common_text_field.dart';
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
+import 'package:instrument_store_mobile/presentation/widgets/error_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/search_loading_widget.dart';
+import 'package:instrument_store_mobile/presentation/widgets/text_highlight_keyword.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 import 'search_controller.dart';
@@ -25,7 +27,6 @@ class SearchPage extends StatelessWidget {
           builder: (controller) {
             return Scaffold(
               body: SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(
                   16,
                   32,
@@ -130,15 +131,20 @@ class _SearchResultSection extends GetView<SearchPageController> {
                 case LoadingState.success:
                   return const _SearchResultWidget();
                 case LoadingState.empty:
-                  return const EmptyHandleWidget(
-                    title: 'Không tìm thấy kết quả',
-                    content: 'Vui lòng thử lại với từ khóa khác',
+                  return EmptyHandleWidget(
+                    title: 'No result found',
+                    content: 'Try another keyword',
+                    onRetry: () {
+                      controller.search();
+                    },
                   );
                 case LoadingState.error:
-                  return const EmptyHandleWidget(
-                    title: 'Có lỗi xảy ra',
-                    content: 'Vui lòng thử lại',
-                    onRetry: null,
+                  return ErrorHandleWidget(
+                    title: 'Oops! Something went wrong',
+                    content: 'Please try again later',
+                    onRetry: () {
+                      controller.search();
+                    },
                   );
               }
             },
@@ -179,7 +185,7 @@ class _RelatedKeywordList extends GetView<SearchPageController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Từ khóa liên quan',
+            'Từ khóa liên quan:',
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -191,7 +197,11 @@ class _RelatedKeywordList extends GetView<SearchPageController> {
             children: controller.resultSearch.value?.relatedKeywords
                     .map(
                       (keyword) => Chip(
-                        label: Text(keyword),
+                        label: TextHighlightKeyword(
+                          keyword: controller.searchController.text,
+                          text: keyword,
+                          basicStyle: context.theme.textTheme.bodySmall,
+                        ),
                       ),
                     )
                     .toList() ??
@@ -228,6 +238,7 @@ class _ProductSearchResultList extends GetView<SearchPageController> {
               clipBehavior: Clip.none,
               children: [
                 Container(
+                  padding: const EdgeInsets.all(16),
                   clipBehavior: Clip.none,
                   decoration: BoxDecoration(
                     color: context.theme.colorScheme.surfaceVariant,
@@ -244,22 +255,58 @@ class _ProductSearchResultList extends GetView<SearchPageController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              product?.name ?? '',
-                              style:
-                                  context.theme.textTheme.titleSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Row(
+                              children: [
+                                Container(
+                                  height: 16,
+                                  width: 16,
+                                  decoration: BoxDecoration(
+                                    color: product?.color,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Obx(
+                                  () => TextHighlightKeyword(
+                                    keyword: controller.searchController.text,
+                                    text: controller.resultSearch.value
+                                            ?.instruments[index].name ??
+                                        '',
+                                    basicStyle: context
+                                        .theme.textTheme.titleSmall
+                                        ?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              product?.name ?? '',
+                              product?.description ?? '',
                               style:
                                   context.theme.textTheme.bodySmall?.copyWith(
                                 color: context.theme.colorScheme.onBackground
                                     .withOpacity(.5),
                               ),
                             ),
+                            if (product?.tags.isNotEmpty == true) ...[
+                              const SizedBox(height: 8),
+                              Obx(
+                                () => TextHighlightKeyword(
+                                  keyword: controller.searchController.text,
+                                  text: controller.resultSearch.value
+                                          ?.instruments[index].tags
+                                          .join(', ') ??
+                                      '',
+                                  basicStyle: context.theme.textTheme.bodySmall
+                                      ?.copyWith(
+                                    color: Colors.orange.shade800,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -272,9 +319,8 @@ class _ProductSearchResultList extends GetView<SearchPageController> {
                   left: 0,
                   child: Image.asset(
                     product?.image ?? '',
-                    height: 80,
-                    width: 80,
                     fit: BoxFit.contain,
+                    width: 120,
                   ),
                 ),
               ],

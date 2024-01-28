@@ -87,7 +87,7 @@ abstract class InstrumentItemService extends BaseService<
     PostInstrumentItemBody,
     PutInstrumentItemBody> {}
 
-abstract class InstrumentService extends BaseService<int, InstrumentModel,
+abstract class InstrumentService extends BaseService<int, InstrumentSearchModel,
     GetInstrumentsQuery, PostInstrumentBody, PutInstrumentBody> {}
 
 abstract class ManufacturerService extends BaseService<int, ManufacturerModel,

@@ -18,18 +18,21 @@ abstract class BaseModel {
 
   factory BaseModel.fromEntity(Type type, BaseEntity entity) {
     switch (type) {
-      case CategoryModel:
+      case CategoryEntity:
         return CategoryModel.fromEntity(entity as CategoryEntity);
-      case InstrumentModel:
+      case InstrumentEntity:
         return InstrumentModel.fromEntity(entity as InstrumentEntity);
-      case CustomerOrderModel:
+      case CustomerOrderEntity:
         return CustomerOrderModel.fromEntity(entity as CustomerOrderEntity);
-      case OrderItemModel:
+      case OrderItemEntity:
         return OrderItemModel.fromEntity(entity as OrderItemEntity);
-      case ManufacturerModel:
+      case ManufacturerEntity:
         return ManufacturerModel.fromEntity(entity as ManufacturerEntity);
-      case InstrumentItemModel:
+      case InstrumentItemEntity:
         return InstrumentItemModel.fromEntity(entity as InstrumentItemEntity);
+      case InstrumentSearchEntity:
+        return InstrumentSearchModel.fromEntity(
+            entity as InstrumentSearchEntity);
       default:
         throw Exception('Invalid type');
     }

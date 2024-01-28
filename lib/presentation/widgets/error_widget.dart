@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class ErrorHandleWidget extends StatelessWidget {
   final String title;
@@ -18,8 +19,15 @@ class ErrorHandleWidget extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
+            Lottie.asset(
+              'assets/empty_animation.json',
+              width: 200,
+              height: 200,
+            ),
             Text(title),
+            const SizedBox(height: 8),
             Text(content),
+            const SizedBox(height: 8),
             ElevatedButton(
               onPressed: onRetry,
               child: const Text('Retry'),
