@@ -38,30 +38,31 @@ class _DashboardPageState extends State<DashboardPage> {
               body: BackgroundWrapper(
             child: SafeArea(
               bottom: false,
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: AnimationLimiter(
-                  child: SizedBox(
-                    width: context.width,
-                    height: context.height,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: AnimationConfiguration.toStaggeredList(
-                        duration: const Duration(milliseconds: 410),
-                        childAnimationBuilder: (widget) => SlideAnimation(
-                          verticalOffset: 50,
-                          child: FadeInAnimation(
-                            child: widget,
+              child: RefreshIndicator(
+                onRefresh: controller.loadCategories,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: AnimationLimiter(
+                    child: SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: AnimationConfiguration.toStaggeredList(
+                          duration: const Duration(milliseconds: 410),
+                          childAnimationBuilder: (widget) => SlideAnimation(
+                            verticalOffset: 50,
+                            child: FadeInAnimation(
+                              child: widget,
+                            ),
                           ),
+                          children: [
+                            const SizedBox(height: 24),
+                            const _WelcomeSection(),
+                            const SizedBox(height: 8),
+                            const _SearchSection(),
+                            const SizedBox(height: 24),
+                            const _CategorySectionBuilder(),
+                          ],
                         ),
-                        children: [
-                          const SizedBox(height: 24),
-                          const _WelcomeSection(),
-                          const SizedBox(height: 8),
-                          const _SearchSection(),
-                          const SizedBox(height: 24),
-                          const _CategorySectionBuilder(),
-                        ],
                       ),
                     ),
                   ),
@@ -183,7 +184,9 @@ class _CategorySectionBuilder extends GetView<DashboardController> {
     return controller.obx(
       (state) => const _CategorySection(),
       onLoading: const LoadingWidget(),
-      onError: (error) => const ErrorHandleWidget(),
+      onError: (error) => ErrorHandleWidget(
+        onRetry: controller.loadCategories,
+      ),
       onEmpty: const EmptyHandleWidget(),
     );
   }
@@ -197,8 +200,8 @@ class _CategorySection extends GetView<DashboardController> {
     return Center(
       child: AnimationLimiter(
         child: Wrap(
-          spacing: 12,
-          runSpacing: 12,
+          spacing: 16,
+          runSpacing: 16,
           alignment: WrapAlignment.spaceBetween,
           runAlignment: WrapAlignment.spaceBetween,
           crossAxisAlignment: WrapCrossAlignment.center,
@@ -280,7 +283,7 @@ class _CategoryItem extends StatelessWidget {
                     topLeft: Radius.circular(100),
                   ),
                   color:
-                      context.theme.colorScheme.surfaceVariant.withOpacity(.7),
+                      context.theme.colorScheme.surfaceVariant.withOpacity(.4),
                 ),
               ),
             ),
@@ -289,15 +292,20 @@ class _CategoryItem extends StatelessWidget {
               children: [
                 ConstrainedBox(
                   constraints: const BoxConstraints(
-                    minHeight: 160,
+                    minHeight: 180,
                     maxHeight: 180,
                   ),
                   child: Hero(
                     tag: ValueKey(category?.id),
-                    child: Image.asset(
-                      category?.image ?? '',
-                      fit: BoxFit.scaleDown,
-                      width: 110,
+                    child: ColorFiltered(
+                      colorFilter: const ColorFilter.mode(
+                        Colors.transparent,
+                        BlendMode.dstOver,
+                      ),
+                      child: Image.asset(
+                        category?.image ?? '',
+                        fit: BoxFit.scaleDown,
+                      ),
                     ),
                   ),
                 ),

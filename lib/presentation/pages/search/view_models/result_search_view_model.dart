@@ -9,23 +9,30 @@ class ResultSearchViewModel {
     required this.instruments,
   });
 
-  static ResultSearchViewModel mockData({required String keyword}) {
-    final keywords = [
-      'keyword_1',
-      'keyword_2',
-      'keyword_3',
-      'keyword_4',
-    ];
-    final instrument = InstrumentModel.mockData(name: keyword);
-    final relatedKeywords = keywords.where((element) {
-      final filterByName =
-          element.toLowerCase().contains(keyword.toLowerCase());
-      final condition = filterByName;
-      return condition;
-    }).toList();
+  factory ResultSearchViewModel.fromModel(InstrumentSearchModel model) {
     return ResultSearchViewModel(
-      relatedKeywords: relatedKeywords,
-      instruments: instrument,
+      relatedKeywords: model.suggestionKeyword ?? [],
+      instruments: model.instruments ?? [],
     );
   }
+
+  // static ResultSearchViewModel mockData({required String keyword}) {
+  //   final keywords = [
+  //     'keyword_1',
+  //     'keyword_2',
+  //     'keyword_3',
+  //     'keyword_4',
+  //   ];
+  //   // final instrument = InstrumentModel.mockData(name: keyword);
+  //   final relatedKeywords = keywords.where((element) {
+  //     final filterByName =
+  //         element.toLowerCase().contains(keyword.toLowerCase());
+  //     final condition = filterByName;
+  //     return condition;
+  //   }).toList();
+  //   return ResultSearchViewModel(
+  //     relatedKeywords: relatedKeywords,
+  //     instruments: instrument,
+  //   );
+  // }
 }

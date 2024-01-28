@@ -8,7 +8,7 @@ class GlobalBinding {
 
   Future<void> init() async {
     DioClient.instance.init(
-      baseUrl: 'https://jsonplaceholder.typicode.com',
+      baseUrl: 'http://10.0.2.2:5000',
     );
     ServiceFactory.instance.init();
   }

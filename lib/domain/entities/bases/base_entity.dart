@@ -23,6 +23,8 @@ abstract class BaseEntity {
         return ManufacturerEntity.fromJson(json);
       case OrderItemEntity:
         return OrderItemEntity.fromJson(json);
+      case InstrumentSearchEntity:
+        return InstrumentSearchEntity.fromJson(json);
       default:
         throw Exception('Invalid type');
     }

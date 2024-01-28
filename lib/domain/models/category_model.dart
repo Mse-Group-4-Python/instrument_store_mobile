@@ -13,7 +13,12 @@ class CategoryModel extends BaseModel {
   });
 
   factory CategoryModel.fromEntity(CategoryEntity entity) {
-    return const CategoryModel(id: 0, name: '', image: '');
+    final image = _getImageByEntityName(entity.categoryName ?? '');
+    return CategoryModel(
+      id: entity.categoryId ?? 0,
+      name: entity.categoryName ?? '',
+      image: image,
+    );
   }
 
   static List<CategoryModel> mockData() {
@@ -29,18 +34,7 @@ class CategoryModel extends BaseModel {
     ];
   }
 
-  String get getImageByEntityName {
-    switch (name.toLowerCase()) {
-      case 'guitar':
-        return 'assets/guitar_category.png';
-      case 'drums':
-        return 'assets/drum_category.png';
-      case 'violin':
-        return 'assets/violin_category.png';
-      case 'saxophone':
-        return 'assets/saxophone_category.png';
-      default:
-        return '';
-    }
+  static String _getImageByEntityName(String name) {
+    return 'assets/${name.toLowerCase()}_category.png';
   }
 }

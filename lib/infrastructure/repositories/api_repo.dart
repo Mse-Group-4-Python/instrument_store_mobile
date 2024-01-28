@@ -64,12 +64,30 @@ class InstrumentItemRepo extends BaseRepo<
 
 class InstrumentRepo extends BaseRepo<
     int,
-    InstrumentEntity,
-    InstrumentModel,
+    InstrumentSearchEntity,
+    InstrumentSearchModel,
     GetInstrumentsQuery,
     PostInstrumentBody,
     PutInstrumentBody> implements InstrumentService {
   InstrumentRepo() : super(path: '/instruments');
+
+  @override
+  Future<InstrumentSearchModel> getToMap(GetInstrumentsQuery query) async {
+    try {
+      final result = await dio.get(
+        path,
+        queryParameters: query.toJson(),
+      );
+      if (result.statusCode == 200) {
+        return InstrumentSearchModel.fromEntity(
+          InstrumentSearchEntity.fromJson(result.data),
+        );
+      }
+      throw Exception('Failed to get');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
 
 class ManufacturerRepo extends BaseRepo<

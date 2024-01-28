@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
+import 'package:instrument_store_mobile/domain/requests/instrument/get_instruments_query.dart';
 import 'package:instrument_store_mobile/domain/services/services.dart';
 import 'package:instrument_store_mobile/presentation/pages/search/view_models/result_search_view_model.dart';
 
@@ -26,17 +29,26 @@ class SearchPageController extends GetxController with ServiceMixin {
   Future<void> search() async {
     loadingState.value = LoadingState.loading;
     try {
-      final result = ResultSearchViewModel.mockData(
-        keyword: searchController.text,
+      final result = await serviceFactory.instrumentService.getToMap(
+        GetInstrumentsQuery(
+          search: searchController.text,
+        ),
       );
-      Future.delayed(const Duration(seconds: 2));
-      if (result.instruments.isEmpty && result.relatedKeywords.isEmpty) {
+
+      if ((result.instruments?.isEmpty ?? true) &&
+          (result.suggestionKeyword?.isEmpty ?? true)) {
         loadingState.value = LoadingState.empty;
         return;
       }
-      resultSearch.value = result;
+      // ResultSearchViewModel.mockData(
+      //   keyword: searchController.text,
+      // );
+
+      resultSearch.value = ResultSearchViewModel.fromModel(result);
       loadingState.value = LoadingState.success;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      log(e.toString(),
+          name: 'SearchPageController_search()', stackTrace: stackTrace);
       loadingState.value = LoadingState.error;
     }
   }

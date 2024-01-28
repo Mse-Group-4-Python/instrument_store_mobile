@@ -18,6 +18,9 @@ abstract class BaseRepo<
   final Dio _dio;
   final String _path;
 
+  Dio get dio => _dio;
+  String get path => _path;
+
   BaseRepo({
     String? path,
     Dio? dio,
@@ -108,5 +111,10 @@ abstract class BaseRepo<
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<Model> getToMap(GetQuery query) {
+    throw UnimplementedError();
   }
 }

@@ -10,6 +10,7 @@ abstract class BaseService<
     PostBody extends BasePostBody,
     PutBody extends BasePutBody> {
   Future<List<Model>> get(GetQuery query);
+  Future<Model> getToMap(GetQuery query);
   Future<Model> getById(IdType id);
   Future<bool> create(PostBody body);
   Future<bool> update(IdType id, PutBody body);
