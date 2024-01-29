@@ -11,6 +11,7 @@ class ProductFilterViewModel {
   final CategoryModel? category;
   final ManufacturerModel? manufacturer;
   final int? instrumentId;
+  final String? tag;
 
   const ProductFilterViewModel({
     required this.keyword,
@@ -21,6 +22,7 @@ class ProductFilterViewModel {
     required this.category,
     required this.manufacturer,
     required this.instrumentId,
+    required this.tag,
   });
 
   factory ProductFilterViewModel.initial() {
@@ -33,6 +35,7 @@ class ProductFilterViewModel {
       category: null,
       manufacturer: null,
       instrumentId: null,
+      tag: null,
     );
   }
 
@@ -45,6 +48,7 @@ class ProductFilterViewModel {
     ValueGetter<CategoryModel?>? category,
     ValueGetter<ManufacturerModel?>? manufacturer,
     ValueGetter<int?>? instrumentId,
+    ValueGetter<String?>? tag,
   }) {
     return ProductFilterViewModel(
       keyword: keyword != null ? keyword() : this.keyword,
@@ -55,6 +59,7 @@ class ProductFilterViewModel {
       category: category != null ? category() : this.category,
       manufacturer: manufacturer != null ? manufacturer() : this.manufacturer,
       instrumentId: instrumentId != null ? instrumentId() : this.instrumentId,
+      tag: tag != null ? tag() : this.tag,
     );
   }
 
@@ -67,6 +72,8 @@ class ProductFilterViewModel {
       sortType: () => null,
       category: () => null,
       manufacturer: () => null,
+      instrumentId: () => null,
+      tag: () => null,
     );
   }
 

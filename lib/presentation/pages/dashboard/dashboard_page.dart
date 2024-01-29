@@ -263,6 +263,7 @@ class _CategoryItem extends StatelessWidget {
             minPrice: null,
             sortBy: null,
             sortType: null,
+            tag: null,
           ),
           initialSearchKeyword: null,
         ),
@@ -313,6 +314,15 @@ class _CategoryItem extends StatelessWidget {
                       child: Image.asset(
                         category?.image ?? '',
                         fit: BoxFit.scaleDown,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const SizedBox(
+                          height: 80,
+                          width: 80,
+                          child: Icon(
+                            Icons.error_outline,
+                            color: Colors.grey,
+                          ),
+                        ),
                       ),
                     ),
                   ),

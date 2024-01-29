@@ -224,6 +224,15 @@ class _InstrumentItem extends GetView<ProductPageController> {
                   child: Image.asset(
                     product.image,
                     fit: BoxFit.scaleDown,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const SizedBox(
+                      height: 80,
+                      width: 80,
+                      child: Icon(
+                        Icons.error_outline,
+                        color: Colors.grey,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -274,23 +283,45 @@ class _InstrumentItem extends GetView<ProductPageController> {
                           ),
                         ],
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Brand: ',
-                            style:
-                                context.theme.textTheme.bodySmall?.copyWith(),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Brand: ',
+                        style: context.theme.textTheme.bodySmall?.copyWith(),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          product.manufacturer,
+                          style: context.theme.textTheme.bodyMedium?.copyWith(
+                            color: context.theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            product.manufacturer,
-                            style: context.theme.textTheme.bodyMedium?.copyWith(
-                              color: context.theme.colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Category: ',
+                        style: context.theme.textTheme.bodySmall?.copyWith(),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          product.category,
+                          style: context.theme.textTheme.bodyMedium?.copyWith(
+                            color: context.theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),

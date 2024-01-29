@@ -1,9 +1,14 @@
 import '../bases/base_get_query.dart';
 
 class GetCustomerOrdersQuery extends BaseGetQuery {
-  GetCustomerOrdersQuery();
+  final String? phoneNumber;
+  GetCustomerOrdersQuery({
+    required this.phoneNumber,
+  });
   @override
   Map<String, dynamic> toJson() {
-    return {};
+    return {
+      if (phoneNumber != null) 'phone_number': phoneNumber,
+    };
   }
 }

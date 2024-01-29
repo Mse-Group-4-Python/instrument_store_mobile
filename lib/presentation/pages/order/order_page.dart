@@ -10,7 +10,6 @@ import 'package:instrument_store_mobile/presentation/widgets/background_wrapper.
 import 'package:instrument_store_mobile/presentation/widgets/common_text_field.dart';
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/error_widget.dart';
-import 'package:instrument_store_mobile/presentation/widgets/loading_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/search_loading_widget.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'order_controller.dart';
@@ -22,7 +21,8 @@ class OrderPage extends StatefulWidget {
   State<OrderPage> createState() => _OrderPageState();
 }
 
-class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixin {
+class _OrderPageState extends State<OrderPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     Get.put(OrderController());
@@ -171,7 +171,7 @@ class _SearchResultSection extends GetView<OrderController> {
 }
 
 class _CustomerOrderItems extends StatelessWidget {
-  const _CustomerOrderItems({super.key, required this.order});
+  const _CustomerOrderItems({required this.order});
   final CustomerOrderModel order;
 
   @override
@@ -186,6 +186,7 @@ class _CustomerOrderItems extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,7 +207,8 @@ class _CustomerOrderItems extends StatelessWidget {
                     color: Colors.orange.shade800,
                     shadows: [
                       BoxShadow(
-                        color: context.theme.colorScheme.onSurface.withOpacity(.1),
+                        color:
+                            context.theme.colorScheme.onSurface.withOpacity(.1),
                         blurRadius: 10,
                         offset: const Offset(5, 5),
                       ),
@@ -229,15 +231,16 @@ class _CustomerOrderItems extends StatelessWidget {
 }
 
 class _HorizontalListOrderItems extends StatelessWidget {
-  const _HorizontalListOrderItems({super.key, required this.order});
+  const _HorizontalListOrderItems({required this.order});
   final CustomerOrderModel order;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
+      height: 100,
       child: AnimationLimiter(
         child: ListView.separated(
+          shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           scrollDirection: Axis.horizontal,
@@ -255,11 +258,13 @@ class _HorizontalListOrderItems extends StatelessWidget {
                       clipBehavior: Clip.none,
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: context.theme.colorScheme.surface.withOpacity(.9),
+                        color:
+                            context.theme.colorScheme.surface.withOpacity(.9),
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: context.theme.colorScheme.onSurface.withOpacity(.1),
+                            color: context.theme.colorScheme.onSurface
+                                .withOpacity(.1),
                             blurRadius: 10,
                             offset: const Offset(5, 5),
                           ),
@@ -272,6 +277,15 @@ class _HorizontalListOrderItems extends StatelessWidget {
                             height: 50,
                             width: 30,
                             fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const SizedBox(
+                              height: 80,
+                              width: 80,
+                              child: Icon(
+                                Icons.error_outline,
+                                color: Colors.grey,
+                              ),
+                            ),
                           ),
                           const SizedBox(width: 8),
                           Column(
@@ -279,11 +293,13 @@ class _HorizontalListOrderItems extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     order.orderItems[index].instrumentName,
-                                    style: context.theme.textTheme.bodyMedium?.copyWith(
+                                    style: context.theme.textTheme.bodyMedium
+                                        ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       color: context.theme.colorScheme.primary,
                                     ),
@@ -291,7 +307,8 @@ class _HorizontalListOrderItems extends StatelessWidget {
                                   const SizedBox(width: 8),
                                   Text(
                                     'x${order.orderItems[index].quantity}',
-                                    style: context.theme.textTheme.bodyMedium?.copyWith(
+                                    style: context.theme.textTheme.bodyMedium
+                                        ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.orange.shade800,
                                     ),
@@ -301,7 +318,8 @@ class _HorizontalListOrderItems extends StatelessWidget {
                               const SizedBox(height: 8),
                               Text(
                                 order.orderItems[index].price.toPrice(),
-                                style: context.theme.textTheme.bodyMedium?.copyWith(
+                                style: context.theme.textTheme.bodyMedium
+                                    ?.copyWith(
                                   color: context.theme.colorScheme.onSurface,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -321,7 +339,7 @@ class _HorizontalListOrderItems extends StatelessWidget {
 }
 
 class _TotalQuantityOrderItem extends StatelessWidget {
-  const _TotalQuantityOrderItem({super.key, required this.order});
+  const _TotalQuantityOrderItem({required this.order});
   final CustomerOrderModel order;
 
   @override
@@ -367,7 +385,7 @@ class _TotalQuantityOrderItem extends StatelessWidget {
 }
 
 class _DetailElementComponent extends StatelessWidget {
-  const _DetailElementComponent({super.key, required this.order});
+  const _DetailElementComponent({required this.order});
   final CustomerOrderModel order;
 
   @override
@@ -419,7 +437,7 @@ class _DetailElementComponent extends StatelessWidget {
 }
 
 class _CustomerOrderInforSection extends StatelessWidget {
-  const _CustomerOrderInforSection({super.key, required this.icon, required this.title});
+  const _CustomerOrderInforSection({required this.icon, required this.title});
   final IconData icon;
   final String title;
 

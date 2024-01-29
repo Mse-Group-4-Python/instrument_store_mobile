@@ -198,11 +198,32 @@ class _RelatedKeywordList extends GetView<SearchPageController> {
             runSpacing: 8,
             children: controller.resultSearch.value?.relatedKeywords
                     .map(
-                      (keyword) => Chip(
-                        label: TextHighlightKeyword(
-                          keyword: controller.searchController.text,
-                          text: keyword,
-                          basicStyle: context.theme.textTheme.bodySmall,
+                      (keyword) => GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            () => ProductPage(
+                              initialFilter: ProductFilterViewModel(
+                                keyword: null,
+                                minPrice: null,
+                                maxPrice: null,
+                                sortBy: null,
+                                sortType: null,
+                                category: null,
+                                manufacturer: null,
+                                instrumentId: null,
+                                tag: keyword,
+                              ),
+                              initialSearchKeyword: null,
+                            ),
+                            arguments: keyword,
+                          );
+                        },
+                        child: Chip(
+                          label: TextHighlightKeyword(
+                            keyword: controller.searchController.text,
+                            text: keyword,
+                            basicStyle: context.theme.textTheme.bodySmall,
+                          ),
                         ),
                       ),
                     )
@@ -260,6 +281,7 @@ class _ProductSearchResultList extends GetView<SearchPageController> {
                       //   name: product?.manufacturerName ?? '',
                       // ),
                       instrumentId: product?.id,
+                      tag: null,
                     ),
                     initialSearchKeyword: null,
                   ),
@@ -357,6 +379,15 @@ class _ProductSearchResultList extends GetView<SearchPageController> {
                       child: Image.asset(
                         product?.image ?? '',
                         fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const SizedBox(
+                          height: 80,
+                          width: 80,
+                          child: Icon(
+                            Icons.error_outline,
+                            color: Colors.grey,
+                          ),
+                        ),
                       ),
                     ),
                   ),

@@ -38,46 +38,48 @@ class _CartPageState extends State<CartPage>
               child: SizedBox(
                 width: double.infinity,
                 height: context.mediaQuery.size.height,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        BackButton(
-                          onPressed: () {
-                            FocusScope.of(context).unfocus();
-                            Get.back();
-                          },
-                        ),
-                        const Expanded(
-                          child: Text(
-                            'Cart',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          BackButton(
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
+                              Get.back();
+                            },
+                          ),
+                          const Expanded(
+                            child: Text(
+                              'Cart',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Obx(
-                      () {
-                        if (controller.cartViewModel.value.isEmpty) {
-                          return Center(
-                            child: EmptyHandleWidget(
-                              title: 'Your cart is empty',
-                              content: 'Add some items to your cart',
-                              onRetry: () => Get.back(),
-                              retryText: 'Go back',
-                            ),
+                        ],
+                      ),
+                      Obx(
+                        () {
+                          if (controller.cartViewModel.value.isEmpty) {
+                            return Center(
+                              child: EmptyHandleWidget(
+                                title: 'Your cart is empty',
+                                content: 'Add some items to your cart',
+                                onRetry: () => Get.back(),
+                                retryText: 'Go back',
+                              ),
+                            );
+                          }
+                          return const AnimatedSize(
+                            duration: Duration(milliseconds: 210),
+                            child: _HasItemInCart(),
                           );
-                        }
-                        return const AnimatedSize(
-                          duration: Duration(milliseconds: 210),
-                          child: _HasItemInCart(),
-                        );
-                      },
-                    ),
-                  ],
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -123,6 +125,7 @@ class _HasItemInCart extends GetView<CartController> {
           horizontal: 16,
           vertical: 16,
         ),
+        physics: const NeverScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const SizedBox(height: 16),
         itemCount: controller.cartViewModel.value.length,
         itemBuilder: (context, index) {
@@ -174,10 +177,17 @@ class _CartItem extends GetView<CartController> {
         maxWidth: double.infinity,
         minHeight: 100,
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       decoration: BoxDecoration(
-        color: context.theme.colorScheme.secondaryContainer,
+        color: context.theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: context.theme.colorScheme.onSurface.withOpacity(.2),
+            blurRadius: 8,
+            offset: const Offset(4, 4),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -199,7 +209,7 @@ class _CartItem extends GetView<CartController> {
                       ),
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: context.theme.colorScheme.surface,
+                        color: context.theme.colorScheme.surfaceVariant,
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(100),
                           topRight: Radius.circular(40),
@@ -221,7 +231,18 @@ class _CartItem extends GetView<CartController> {
                     bottom: -20,
                     right: -20,
                     width: 120,
-                    child: Image.asset(item.image),
+                    child: Image.asset(
+                      item.image,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const SizedBox(
+                        height: 80,
+                        width: 80,
+                        child: Icon(
+                          Icons.error_outline,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -251,7 +272,7 @@ class _CartItem extends GetView<CartController> {
                         child: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: context.theme.colorScheme.surface,
+                            color: context.theme.colorScheme.surfaceVariant,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(
@@ -284,7 +305,7 @@ class _CartItem extends GetView<CartController> {
                         child: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: context.theme.colorScheme.surface,
+                            color: context.theme.colorScheme.surfaceVariant,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(
@@ -309,7 +330,7 @@ class _CartItem extends GetView<CartController> {
                       Text(
                         item.price.toPrice(),
                         style: context.theme.textTheme.titleMedium?.copyWith(
-                          color: context.theme.colorScheme.primary,
+                          color: Colors.amber.shade600,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -346,7 +367,7 @@ class _CartItem extends GetView<CartController> {
                           totalPriceOnItem.toPrice(),
                           key: ValueKey('${item.id}_$totalPriceOnItem'),
                           style: context.theme.textTheme.titleMedium?.copyWith(
-                            color: Colors.orange.shade900,
+                            color: context.theme.colorScheme.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -362,13 +383,13 @@ class _CartItem extends GetView<CartController> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: context.theme.colorScheme.surface,
+                color: context.theme.colorScheme.secondaryContainer,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
                 Icons.close,
                 size: 24,
-                color: Colors.red,
+                color: Colors.grey,
               ),
             ),
           ),
@@ -378,7 +399,7 @@ class _CartItem extends GetView<CartController> {
   }
 }
 
-class _CheckoutSection extends StatelessWidget {
+class _CheckoutSection extends GetView<CartController> {
   const _CheckoutSection({
     required this.totalPrice,
   });
@@ -386,7 +407,7 @@ class _CheckoutSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: context.mediaQuery.size.height * .1,
       decoration: BoxDecoration(
         color: context.theme.colorScheme.secondaryContainer,
         borderRadius: const BorderRadius.only(
@@ -429,12 +450,13 @@ class _CheckoutSection extends StatelessWidget {
                   totalPrice.toPrice(),
                   key: ValueKey(totalPrice),
                   style: context.theme.textTheme.titleLarge?.copyWith(
-                    color: Colors.orange.shade900,
+                    color: context.theme.colorScheme.primary,
                     fontWeight: FontWeight.bold,
                     fontFamily: GoogleFonts.roboto().fontFamily,
                     shadows: [
                       BoxShadow(
-                        color: Colors.orange.shade900.withOpacity(.2),
+                        color:
+                            context.theme.colorScheme.onSurface.withOpacity(.2),
                         blurRadius: 8,
                         offset: const Offset(4, 4),
                       ),
@@ -451,7 +473,7 @@ class _CheckoutSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
-            onPressed: () {},
+            onPressed: () => controller.showCheckoutDialog(),
             icon: Icon(
               Icons.payment,
               color: context.theme.colorScheme.onPrimary,

@@ -43,10 +43,15 @@ class ProductPageController extends GetxController with ServiceMixin {
           categoryId: initialFilter?.category?.id,
           manufacturerId: initialFilter?.manufacturer?.id,
           instrumentId: initialFilter?.instrumentId,
+          tag: initialFilter?.tag,
         ),
       );
+      if (instrumentItems.isEmpty) {
+        _loadingState.value = LoadingState.empty;
+        return;
+      }
+      await Future.delayed(const Duration(seconds: 1));
       _instrumentItemModels.value = instrumentItems;
-      await Future.delayed(const Duration(seconds: 2));
       _loadingState.value = LoadingState.success;
     } catch (e) {
       _loadingState.value = LoadingState.error;

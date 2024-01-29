@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:intl/intl.dart';
+
 extension StringExt on String {
   String removeDiacritics() {
     final diacriticsMap = {};
@@ -47,6 +49,11 @@ extension StringExt on String {
       result.add(text.substring(start, end));
     }
     return result;
+  }
+
+  ///Wed, 07 Mar 2012 10:20:27 GMT (String) ->  DateTime
+  DateTime toFormatDateTime() {
+    return DateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'").parse(this);
   }
 }
 
