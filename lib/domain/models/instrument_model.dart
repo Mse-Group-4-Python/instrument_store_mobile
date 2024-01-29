@@ -28,6 +28,10 @@ class InstrumentModel extends BaseModel {
   final String description;
   final String colorString;
   final List<String> tags;
+  final int categoryId;
+  final int manufacturerId;
+  final String categoryName;
+  final String manufacturerName;
   const InstrumentModel({
     required this.id,
     required this.image,
@@ -35,6 +39,10 @@ class InstrumentModel extends BaseModel {
     required this.description,
     required this.tags,
     required this.colorString,
+    required this.categoryId,
+    required this.manufacturerId,
+    required this.categoryName,
+    required this.manufacturerName,
   });
 
   factory InstrumentModel.fromEntity(InstrumentEntity entity) {
@@ -45,11 +53,15 @@ class InstrumentModel extends BaseModel {
       description: entity.description ?? '',
       tags: entity.tags ?? [],
       colorString: entity.color ?? '',
+      categoryId: entity.categoryId ?? 0,
+      manufacturerId: entity.manufacturerId ?? 0,
+      categoryName: entity.categoryName ?? '',
+      manufacturerName: entity.manufacturerName ?? '',
     );
   }
 
   static String _getImageFromName(String name) {
-    return 'assets/guitar_category.png';
+    return 'assets/${name.toLowerCase()}_instrument.png';
   }
 
   Color get color {

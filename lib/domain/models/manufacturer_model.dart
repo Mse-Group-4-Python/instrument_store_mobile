@@ -10,54 +10,58 @@ class ManufacturerModel extends BaseModel {
   });
 
   factory ManufacturerModel.fromEntity(ManufacturerEntity entity) {
-    return const ManufacturerModel(
-      id: 0,
-      name: '',
+    return ManufacturerModel(
+      id: entity.manufacturerId ?? 0,
+      name: entity.manufacturerName ?? '',
     );
   }
 
-  static List<ManufacturerModel> mockData() {
-    return [
-      const ManufacturerModel(
-        id: 1,
-        name: 'Yahama',
-      ),
-      const ManufacturerModel(
-        id: 2,
-        name: 'Fender',
-      ),
-      const ManufacturerModel(
-        id: 3,
-        name: 'Ibanez',
-      ),
-      const ManufacturerModel(
-        id: 4,
-        name: 'Gibson',
-      ),
-      const ManufacturerModel(
-        id: 5,
-        name: 'Epiphone',
-      ),
-      const ManufacturerModel(
-        id: 6,
-        name: 'Squier',
-      ),
-      const ManufacturerModel(
-        id: 7,
-        name: 'PRS',
-      ),
-      const ManufacturerModel(
-        id: 8,
-        name: 'Jackson',
-      ),
-      const ManufacturerModel(
-        id: 9,
-        name: 'ESP',
-      ),
-      const ManufacturerModel(
-        id: 10,
-        name: 'Schecter',
-      ),
-    ];
+  String get imageUrl {
+    return 'assets/${name.toLowerCase()}_manufacturer.png';
   }
+
+  // static List<ManufacturerModel> mockData() {
+  //   return [
+  //     const ManufacturerModel(
+  //       id: 1,
+  //       name: 'Yahama',
+  //     ),
+  //     const ManufacturerModel(
+  //       id: 2,
+  //       name: 'Fender',
+  //     ),
+  //     const ManufacturerModel(
+  //       id: 3,
+  //       name: 'Ibanez',
+  //     ),
+  //     const ManufacturerModel(
+  //       id: 4,
+  //       name: 'Gibson',
+  //     ),
+  //     const ManufacturerModel(
+  //       id: 5,
+  //       name: 'Epiphone',
+  //     ),
+  //     const ManufacturerModel(
+  //       id: 6,
+  //       name: 'Squier',
+  //     ),
+  //     const ManufacturerModel(
+  //       id: 7,
+  //       name: 'PRS',
+  //     ),
+  //     const ManufacturerModel(
+  //       id: 8,
+  //       name: 'Jackson',
+  //     ),
+  //     const ManufacturerModel(
+  //       id: 9,
+  //       name: 'ESP',
+  //     ),
+  //     const ManufacturerModel(
+  //       id: 10,
+  //       name: 'Schecter',
+  //     ),
+  //   ];
+  // }
 }

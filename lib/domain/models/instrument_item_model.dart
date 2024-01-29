@@ -29,17 +29,17 @@ class InstrumentItemModel extends BaseModel {
   });
 
   factory InstrumentItemModel.fromEntity(InstrumentItemEntity entity) {
-    return const InstrumentItemModel(
-      id: 0,
-      name: '',
-      description: '',
-      image: '',
-      price: 0,
-      yearOfPurchase: 0,
-      manufacturer: '',
-      category: '',
-      series: '',
-      colorString: '',
+    return InstrumentItemModel(
+      id: entity.id ?? 0,
+      name: entity.instrumentName ?? '',
+      description: entity.description ?? '',
+      image: 'assets/${entity.instrumentName?.toLowerCase()}_instrument.png',
+      price: entity.price ?? 0,
+      yearOfPurchase: entity.yearOfPurchase ?? 0,
+      manufacturer: entity.manufacturerName ?? '',
+      category: entity.categoryName ?? '',
+      series: entity.serialNumber ?? '',
+      colorString: entity.color ?? '',
     );
   }
 
@@ -92,7 +92,7 @@ class InstrumentItemModel extends BaseModel {
   }
 
   Color get color {
-    switch (colorString) {
+    switch (colorString.toLowerCase()) {
       case 'red':
         return Colors.red;
       case 'blue':
@@ -107,16 +107,20 @@ class InstrumentItemModel extends BaseModel {
         return Colors.purple;
       case 'pink':
         return Colors.pink;
+      case 'wood':
+        return Colors.brown.shade600;
       case 'brown':
         return Colors.brown;
       case 'grey':
         return Colors.grey;
       case 'black':
         return Colors.black;
-      case 'white':
-        return Colors.white;
+      case 'natural':
+        return Colors.brown.shade300;
+      case 'natural trumpets':
+        return Colors.yellow.shade700;
       default:
-        return Colors.transparent;
+        return Colors.white;
     }
   }
 }

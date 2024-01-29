@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
+import 'package:instrument_store_mobile/presentation/pages/product/product_page.dart';
 import 'package:instrument_store_mobile/presentation/widgets/common_text_field.dart';
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/error_widget.dart';
+import 'package:instrument_store_mobile/presentation/widgets/product_filter/view_models/product_filter_view_model.dart';
 import 'package:instrument_store_mobile/presentation/widgets/search_loading_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/text_highlight_keyword.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
@@ -234,96 +236,132 @@ class _ProductSearchResultList extends GetView<SearchPageController> {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             final product = controller.resultSearch.value?.instruments[index];
-            return Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  clipBehavior: Clip.none,
-                  decoration: BoxDecoration(
-                    color: context.theme.colorScheme.surfaceVariant,
-                    borderRadius: BorderRadius.circular(16),
+            return GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+                Get.to(
+                  ProductPage(
+                    initialFilter: ProductFilterViewModel(
+                      keyword: null,
+                      minPrice: null,
+                      maxPrice: null,
+                      sortBy: null,
+                      sortType: null,
+                      category: null,
+                      // CategoryModel(
+                      //   id: product?.categoryId ?? 0,
+                      //   name: product?.categoryName ?? '',
+                      //   image:
+                      //       'assets/${product?.categoryName ?? ''}_category.png',
+                      // ),
+                      manufacturer: null,
+                      // ManufacturerModel(
+                      //   id: product?.manufacturerId ?? 0,
+                      //   name: product?.manufacturerName ?? '',
+                      // ),
+                      instrumentId: product?.id,
+                    ),
+                    initialSearchKeyword: null,
                   ),
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        height: 80,
-                        width: 80,
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  height: 16,
-                                  width: 16,
-                                  decoration: BoxDecoration(
-                                    color: product?.color,
-                                    shape: BoxShape.circle,
+                  arguments: product,
+                );
+              },
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    clipBehavior: Clip.none,
+                    decoration: BoxDecoration(
+                      color: context.theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          height: 80,
+                          width: 80,
+                        ),
+                        const SizedBox(width: 24),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    height: 16,
+                                    width: 16,
+                                    decoration: BoxDecoration(
+                                      color: product?.color,
+                                      shape: BoxShape.circle,
+                                    ),
                                   ),
+                                  const SizedBox(width: 8),
+                                  Obx(
+                                    () => TextHighlightKeyword(
+                                      keyword: controller.searchController.text,
+                                      text: controller.resultSearch.value
+                                              ?.instruments[index].name ??
+                                          '',
+                                      basicStyle: context
+                                          .theme.textTheme.titleSmall
+                                          ?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                product?.description ?? '',
+                                style:
+                                    context.theme.textTheme.bodySmall?.copyWith(
+                                  color: context.theme.colorScheme.onBackground
+                                      .withOpacity(.5),
                                 ),
-                                const SizedBox(width: 8),
+                              ),
+                              if (product?.tags.isNotEmpty == true) ...[
+                                const SizedBox(height: 8),
                                 Obx(
                                   () => TextHighlightKeyword(
                                     keyword: controller.searchController.text,
                                     text: controller.resultSearch.value
-                                            ?.instruments[index].name ??
+                                            ?.instruments[index].tags
+                                            .join(', ') ??
                                         '',
                                     basicStyle: context
-                                        .theme.textTheme.titleSmall
+                                        .theme.textTheme.bodySmall
                                         ?.copyWith(
-                                      fontWeight: FontWeight.w600,
+                                      color: Colors.orange.shade800,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
                               ],
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              product?.description ?? '',
-                              style:
-                                  context.theme.textTheme.bodySmall?.copyWith(
-                                color: context.theme.colorScheme.onBackground
-                                    .withOpacity(.5),
-                              ),
-                            ),
-                            if (product?.tags.isNotEmpty == true) ...[
-                              const SizedBox(height: 8),
-                              Obx(
-                                () => TextHighlightKeyword(
-                                  keyword: controller.searchController.text,
-                                  text: controller.resultSearch.value
-                                          ?.instruments[index].tags
-                                          .join(', ') ??
-                                      '',
-                                  basicStyle: context.theme.textTheme.bodySmall
-                                      ?.copyWith(
-                                    color: Colors.orange.shade800,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
                             ],
-                          ],
+                          ),
                         ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: -20,
+                    bottom: 0,
+                    left: 0,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxWidth: 110,
                       ),
-                    ],
+                      child: Image.asset(
+                        product?.image ?? '',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
-                ),
-                Positioned(
-                  top: -20,
-                  bottom: 0,
-                  left: 0,
-                  child: Image.asset(
-                    product?.image ?? '',
-                    fit: BoxFit.contain,
-                    width: 120,
-                  ),
-                ),
-              ],
+                ],
+              ),
             );
           },
           separatorBuilder: (context, index) => const SizedBox(height: 16),

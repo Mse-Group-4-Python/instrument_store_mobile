@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
 import 'package:instrument_store_mobile/domain/models/category_model.dart';
 import 'package:instrument_store_mobile/domain/models/manufacturer_model.dart';
+import 'package:instrument_store_mobile/domain/requests/manufacturer/get_manufacturers_query.dart';
 import 'package:instrument_store_mobile/domain/services/services.dart';
 
 import 'view_models/product_filter_view_model.dart';
@@ -51,7 +52,9 @@ class ProductFilterController extends GetxController with ServiceMixin {
   Future<void> _fetchManufacturers() async {
     try {
       _manufacturerLoadingState.value = LoadingState.loading;
-      final manufacturers = ManufacturerModel.mockData();
+      final manufacturers =
+          await serviceFactory.manufacturerService.get(GetManufacturersQuery());
+      // ManufacturerModel.mockData();
       // await manufacturerService.getAllManufacturers();
       _manufacturersSelection.value = manufacturers;
       _manufacturerLoadingState.value = LoadingState.success;

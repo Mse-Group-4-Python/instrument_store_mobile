@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
 import 'package:instrument_store_mobile/domain/models/instrument_item_model.dart';
+import 'package:instrument_store_mobile/domain/requests/instrument_item/get_instrument_items_query.dart';
 import 'package:instrument_store_mobile/domain/services/services.dart';
 import 'package:instrument_store_mobile/presentation/pages/cart/cart_controller.dart';
 import 'package:instrument_store_mobile/presentation/pages/cart/view_models/cart_view_model.dart';
@@ -37,7 +38,13 @@ class ProductPageController extends GetxController with ServiceMixin {
   Future<void> fetchInstrumentItems() async {
     _loadingState.value = LoadingState.loading;
     try {
-      final instrumentItems = InstrumentItemModel.mockData();
+      final instrumentItems = await serviceFactory.instrumentItemService.get(
+        GetInstrumentItemsQuery(
+          categoryId: initialFilter?.category?.id,
+          manufacturerId: initialFilter?.manufacturer?.id,
+          instrumentId: initialFilter?.instrumentId,
+        ),
+      );
       _instrumentItemModels.value = instrumentItems;
       await Future.delayed(const Duration(seconds: 2));
       _loadingState.value = LoadingState.success;

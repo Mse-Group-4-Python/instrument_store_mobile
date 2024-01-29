@@ -1,6 +1,9 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:get/get.dart';
+import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
+import 'package:instrument_store_mobile/domain/requests/customer_order/post_customer_order_body.dart';
+import 'package:instrument_store_mobile/domain/requests/order_item/post_order_item_body.dart';
 import 'package:instrument_store_mobile/domain/services/services.dart';
 
 import 'view_models/cart_view_model.dart';
@@ -9,6 +12,8 @@ class CartController extends GetxController with ServiceMixin {
   final Rx<List<CartItem>> cartViewModel = Rx<List<CartItem>>(
     [],
   );
+
+  final checkOutLoadingState = Rx<LoadingState>(LoadingState.initial);
 
   void addToCart(CartItem item) {
     final itemInCart = cartViewModel.value
@@ -81,5 +86,40 @@ class CartController extends GetxController with ServiceMixin {
 
   void deleteCart() {
     cartViewModel.value = [];
+  }
+
+  Future<void> checkout() async {
+    checkOutLoadingState.call(LoadingState.loading);
+    try {
+      final result = await serviceFactory.customerOrderService.create(
+        PostCustomerOrderBody(
+          customerName: 'Test',
+          deliveryAddress: 'Test',
+          phoneNumber: 'Test',
+          orderItems: cartViewModel.value
+              .map(
+                (e) => PostOrderItemBody(
+                  id: e.instrumentItem.id,
+                  quantity: e.quantity,
+                ),
+              )
+              .toList(),
+        ),
+      );
+      if (result) {
+        checkOutLoadingState.call(LoadingState.success);
+        deleteCart();
+        return;
+      }
+    } catch (e) {
+      checkOutLoadingState.call(LoadingState.error);
+      Get.snackbar(
+        'Cannot checkout your cart',
+        'Oh no! Something went wrong. Please try again later.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      await Future.delayed(const Duration(seconds: 2));
+      checkOutLoadingState.call(LoadingState.initial);
+    }
   }
 }

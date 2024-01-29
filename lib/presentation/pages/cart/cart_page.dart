@@ -174,204 +174,203 @@ class _CartItem extends GetView<CartController> {
         maxWidth: double.infinity,
         minHeight: 100,
       ),
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
       decoration: BoxDecoration(
         color: context.theme.colorScheme.secondaryContainer,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Stack(
-            clipBehavior: Clip.none,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  constraints: const BoxConstraints(
-                    maxHeight: 80,
-                    maxWidth: 80,
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: context.theme.colorScheme.surface,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(100),
-                      topRight: Radius.circular(40),
-                      bottomLeft: Radius.circular(16),
-                      bottomRight: Radius.circular(40),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        maxHeight: 80,
+                        maxWidth: 80,
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: context.theme.colorScheme.surface,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(100),
+                          topRight: Radius.circular(40),
+                          bottomLeft: Radius.circular(16),
+                          bottomRight: Radius.circular(40),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: context.theme.colorScheme.onSurface
+                                .withOpacity(.2),
+                            blurRadius: 8,
+                            offset: const Offset(4, 4),
+                          ),
+                        ],
+                      ),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color:
-                            context.theme.colorScheme.onSurface.withOpacity(.2),
-                        blurRadius: 8,
-                        offset: const Offset(4, 4),
+                  ),
+                  Positioned(
+                    bottom: -20,
+                    right: -20,
+                    width: 120,
+                    child: Image.asset(item.image),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                item.name,
+                style: context.theme.textTheme.titleMedium?.copyWith(
+                  color: context.theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 24),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 210),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: () => onDecrement.call(item),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: context.theme.colorScheme.surface,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.remove,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 210),
+                        reverseDuration: Duration.zero,
+                        transitionBuilder: (child, animation) {
+                          return ScaleTransition(
+                            scale: animation,
+                            child: child,
+                          );
+                        },
+                        child: Text(
+                          quantity.toString(),
+                          key: ValueKey('${item.id}_$quantity'),
+                          style: context.theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      InkWell(
+                        onTap: () => onIncrement.call(item),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: context.theme.colorScheme.surface,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Row(
+                    children: [
+                      Text(
+                        'U.Price: ',
+                        style: context.theme.textTheme.labelMedium,
+                      ),
+                      Text(
+                        item.price.toPrice(),
+                        style: context.theme.textTheme.titleMedium?.copyWith(
+                          color: context.theme.colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: 12,
-                width: 80,
-                child: Image.asset(
-                  item.image,
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.name,
-                    style: context.theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          item.price.toPrice(),
+                const SizedBox(height: 24),
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 210),
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: [
+                      Text(
+                        'Price: ',
+                        style: context.theme.textTheme.labelMedium,
+                      ),
+                      const SizedBox(width: 8),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 210),
+                        reverseDuration: const Duration(milliseconds: 210),
+                        transitionBuilder: (child, animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(0, .5),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            ),
+                          );
+                        },
+                        child: Text(
+                          totalPriceOnItem.toPrice(),
+                          key: ValueKey('${item.id}_$totalPriceOnItem'),
                           style: context.theme.textTheme.titleMedium?.copyWith(
-                            color: context.theme.colorScheme.primary,
+                            color: Colors.orange.shade900,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(width: 16),
-          Column(
-            children: [
-              AnimatedSize(
-                duration: const Duration(milliseconds: 210),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () => onDecrement.call(item),
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: context.theme.colorScheme.surface,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.remove,
-                          size: 16,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 210),
-                      reverseDuration: Duration.zero,
-                      transitionBuilder: (child, animation) {
-                        return ScaleTransition(
-                          scale: animation,
-                          child: child,
-                        );
-                      },
-                      child: Text(
-                        quantity.toString(),
-                        key: ValueKey('${item.id}_$quantity'),
-                        style: context.theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    InkWell(
-                      onTap: () => onIncrement.call(item),
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: context.theme.colorScheme.surface,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.add,
-                          size: 16,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    InkWell(
-                      onTap: () => onRemove.call(item),
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: context.theme.colorScheme.surface,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.delete,
-                          size: 16,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+          InkWell(
+            onTap: () => onRemove.call(item),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: context.theme.colorScheme.surface,
+                borderRadius: BorderRadius.circular(8),
               ),
-              const SizedBox(height: 16),
-              AnimatedSize(
-                duration: const Duration(milliseconds: 210),
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'Price: ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 210),
-                      reverseDuration: const Duration(milliseconds: 210),
-                      transitionBuilder: (child, animation) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: SlideTransition(
-                            position: Tween<Offset>(
-                              begin: const Offset(0, .5),
-                              end: Offset.zero,
-                            ).animate(animation),
-                            child: child,
-                          ),
-                        );
-                      },
-                      child: Text(
-                        totalPriceOnItem.toPrice(),
-                        key: ValueKey('${item.id}_$totalPriceOnItem'),
-                        style: context.theme.textTheme.titleLarge?.copyWith(
-                          color: Colors.orange.shade900,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              child: const Icon(
+                Icons.close,
+                size: 24,
+                color: Colors.red,
               ),
-            ],
+            ),
           ),
         ],
       ),
@@ -429,7 +428,7 @@ class _CheckoutSection extends StatelessWidget {
                 child: Text(
                   totalPrice.toPrice(),
                   key: ValueKey(totalPrice),
-                  style: context.theme.textTheme.headlineMedium?.copyWith(
+                  style: context.theme.textTheme.titleLarge?.copyWith(
                     color: Colors.orange.shade900,
                     fontWeight: FontWeight.bold,
                     fontFamily: GoogleFonts.roboto().fontFamily,

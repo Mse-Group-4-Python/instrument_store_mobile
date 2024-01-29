@@ -25,7 +25,9 @@ class InstrumentEntity extends BaseEntity {
   InstrumentEntity({
     required this.instrumentName,
     required this.manufacturerId,
+    required this.manufacturerName,
     required this.categoryId,
+    required this.categoryName,
     required this.description,
     required this.color,
     required this.tags,
@@ -33,7 +35,9 @@ class InstrumentEntity extends BaseEntity {
   });
   final String? instrumentName;
   final int? manufacturerId;
+  final String? manufacturerName;
   final int? categoryId;
+  final String? categoryName;
   final String? description;
   final String? color;
   final List<String>? tags;
@@ -43,7 +47,9 @@ class InstrumentEntity extends BaseEntity {
     return InstrumentEntity(
       instrumentName: json['instrument_name'],
       manufacturerId: json['manufacturer_id'],
+      manufacturerName: json['manufacturer_name'],
       categoryId: json['category_id'],
+      categoryName: json['category_name'],
       description: json['description'],
       color: json['color'],
       tags: json['tags'] != null

@@ -12,8 +12,6 @@ import 'package:instrument_store_mobile/presentation/widgets/common_text_field.d
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/error_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/loading_widget.dart';
-import 'package:instrument_store_mobile/presentation/widgets/product_filter/product_filter_controller.dart';
-import 'package:instrument_store_mobile/presentation/widgets/product_filter/product_filter_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/product_filter/view_models/product_filter_view_model.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
@@ -55,7 +53,7 @@ class ProductPage extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      _SearchAndFilterSection(),
+                      // _SearchAndFilterSection(),
                       Expanded(child: _SearchResultSection()),
                     ],
                   ),
@@ -92,12 +90,12 @@ class _SearchAndFilterSection extends GetView<ProductPageController> {
               autofocus: false,
             ),
           ),
-          const SizedBox(width: 8),
-          ProductFilterButton(
-            controller: ProductFilterController(
-              initialFilter: controller.initialFilter,
-            ),
-          )
+          // const SizedBox(width: 8),
+          // ProductFilterButton(
+          //   controller: ProductFilterController(
+          //     initialFilter: controller.initialFilter,
+          //   ),
+          // )
         ],
       ),
     );
@@ -239,14 +237,11 @@ class _InstrumentItem extends GetView<ProductPageController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      product.name,
-                      style: context.theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
-                      ),
+                  Text(
+                    '${product.name} ${product.description}',
+                    style: context.theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -300,31 +295,27 @@ class _InstrumentItem extends GetView<ProductPageController> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    product.description * 3,
-                    style: context.theme.textTheme.labelMedium?.copyWith(
-                      color: context.theme.colorScheme.onBackground
-                          .withOpacity(.5),
-                    ),
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 24),
                   Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          product.price.toPrice(),
-                          style:
-                              context.theme.textTheme.headlineSmall?.copyWith(
-                            color: context.theme.colorScheme.primary,
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              product.price.toPrice(),
+                              style:
+                                  context.theme.textTheme.titleMedium?.copyWith(
+                                color: context.theme.colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
-                        const Spacer(),
+                        const SizedBox(width: 12),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: context.theme.colorScheme.primary,

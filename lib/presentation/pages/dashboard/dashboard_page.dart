@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:instrument_store_mobile/domain/enums/loading_enum.dart';
 import 'package:instrument_store_mobile/domain/models/category_model.dart';
 import 'package:instrument_store_mobile/presentation/pages/dashboard/dashboard_controller.dart';
 import 'package:instrument_store_mobile/presentation/pages/product/product_page.dart';
@@ -11,7 +12,6 @@ import 'package:instrument_store_mobile/presentation/widgets/background_wrapper.
 import 'package:instrument_store_mobile/presentation/widgets/empty_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/error_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/loading_widget.dart';
-import 'package:instrument_store_mobile/presentation/widgets/product_filter/product_filter_widget.dart';
 import 'package:instrument_store_mobile/presentation/widgets/product_filter/view_models/product_filter_view_model.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
@@ -145,8 +145,8 @@ class _SearchSection extends GetView<DashboardController> {
                 ),
               ),
             ),
-            const SizedBox(width: 8),
-            const ProductFilterButton()
+            // const SizedBox(width: 8),
+            // const ProductFilterButton()
           ],
         ),
       ],
@@ -181,13 +181,20 @@ class _CategorySectionBuilder extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    return controller.obx(
-      (state) => const _CategorySection(),
-      onLoading: const LoadingWidget(),
-      onError: (error) => ErrorHandleWidget(
-        onRetry: controller.loadCategories,
-      ),
-      onEmpty: const EmptyHandleWidget(),
+    return Obx(
+      () {
+        switch (controller.categoryLoadingState.value) {
+          case LoadingState.initial:
+          case LoadingState.loading:
+            return const LoadingWidget();
+          case LoadingState.success:
+            return const _CategorySection();
+          case LoadingState.error:
+            return const ErrorHandleWidget();
+          case LoadingState.empty:
+            return const EmptyHandleWidget();
+        }
+      },
     );
   }
 }
@@ -205,10 +212,10 @@ class _CategorySection extends GetView<DashboardController> {
           alignment: WrapAlignment.spaceBetween,
           runAlignment: WrapAlignment.spaceBetween,
           crossAxisAlignment: WrapCrossAlignment.center,
-          children: (controller.state ?? []).map(
+          children: (controller.categories).map(
             (category) {
               return AnimationConfiguration.staggeredList(
-                position: controller.state?.indexOf(category) ?? 0,
+                position: controller.categories.indexOf(category),
                 child: FadeInAnimation(
                   child: SlideAnimation(
                     verticalOffset: 50,
@@ -251,6 +258,7 @@ class _CategoryItem extends StatelessWidget {
             keyword: null,
             category: category,
             manufacturer: null,
+            instrumentId: null,
             maxPrice: null,
             minPrice: null,
             sortBy: null,
